@@ -1,5 +1,5 @@
 import {AppBar,Container,Toolbar,Typography,Button,Link,Box} from '@mui/material'
-import {SignIn} from '@clerk/nextjs'
+import {SignUp} from '@clerk/nextjs'
 export default function SignUpPage(){
   return(
     <Container maxWidth="100vw">
@@ -15,8 +15,8 @@ export default function SignUpPage(){
         </Toolbar>
       </AppBar>
       <Box display="flex" flexDirection="column" alignItems="center" justifyContent="center">
-        <Typography variant="h4">Sign In</Typography>
-        <SignIn/>
+        <Typography variant="h4">Sign Up</Typography>
+        <SignUp/>
       </Box>
     </Container>
   )

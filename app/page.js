@@ -46,8 +46,8 @@ export default function EnhancedLandingPage() {
             Flashcard SaaS
           </Typography>
           <SignedOut>
-            <Button color="inherit" sx={{ mx: 1 }}>Login</Button>
-            <Button variant="contained" color="primary" sx={{ mx: 1 }}>Sign up</Button>
+            <Button color="inherit" sx={{ mx: 1 }} href="/sign-in">Login</Button>
+            <Button variant="contained" color="primary" sx={{ mx: 1 }} href="/sign-up">Sign up</Button>
           </SignedOut>
           <SignedIn>
             <UserButton />
