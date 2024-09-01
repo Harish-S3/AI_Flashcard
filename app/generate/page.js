@@ -1,11 +1,10 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Container, TextField, Typography, Box, Paper,Button } from '@mui/material';
+import { Container, TextField, Typography, Box, Paper, Button, Grid, Card, CardActionArea, CardContent } from '@mui/material';
 import { writeBatch, doc, collection, getDoc } from "firebase/firestore";  
 import { useUser } from "@clerk/nextjs";
 import { db } from '../../firebaseconfig';
-
 
 export default function Generate() {
   const { isLoaded, isSignedIn, user } = useUser();
@@ -95,19 +94,31 @@ export default function Generate() {
             variant="outlined"
             sx={{ mb: 2 }}
           />
-          <TextField
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            label="Flashcard Set Name"
-            fullWidth
-            variant="outlined"
-            sx={{ mb: 2 }}
-          />
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+          <Button variant="contained" color="primary" onClick={handleSubmit} fullWidth>
             Generate Flashcards
           </Button>
         </Paper>
       </Box>
+      {flashcards.length > 0 && (
+        <Box sx={{ mt: 4 }}>
+          <Typography variant="h5">Flashcards Preview</Typography>
+          <Grid container spacing={3}>
+            {flashcards.map((flashcard, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Card>
+                  <CardActionArea onClick={() => handleCardClick(index)}>
+                    <CardContent>
+                      <Typography variant="h5" component="div">
+                        {flipped[index] ? flashcard.back : flashcard.front}
+                      </Typography>
+                    </CardContent>
+                  </CardActionArea>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+      )}
     </Container>
   );
 }
