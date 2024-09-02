@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import { Container, TextField, Typography, Box, Paper, Button, Grid, Card, CardActionArea, CardContent } from '@mui/material';
+import { Container, TextField, Typography, Box, Paper, Button, Grid, Card, CardActionArea, CardContent, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from '@mui/material';
 import { writeBatch, doc, collection, getDoc } from "firebase/firestore";  
 import { useUser } from "@clerk/nextjs";
 import { db } from '../../firebaseconfig';
@@ -108,17 +108,80 @@ export default function Generate() {
                 <Card>
                   <CardActionArea onClick={() => handleCardClick(index)}>
                     <CardContent>
-                      <Typography variant="h5" component="div">
-                        {flipped[index] ? flashcard.back : flashcard.front}
-                      </Typography>
+                      <Box 
+                        sx={{
+                          perspective: '1000px',
+                          '& > div': {
+                            transition: 'transform 0.6s',
+                            transformStyle: 'preserve-3d',
+                            position: 'relative',
+                            width: '100%',
+                            height: '200px',
+                            boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
+                            transform: flipped[index] ? 'rotateY(180deg)' : 'rotateY(0deg)',
+                          },
+                        }}
+                      >
+                        <div>
+                          <div
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              backfaceVisibility: 'hidden',
+                              transform: 'rotateY(0deg)',
+                            }}
+                          >
+                            <Typography variant="h5" component="div">
+                              {flashcard.front}
+                            </Typography>
+                          </div>
+                          <div
+                            style={{
+                              position: 'absolute',
+                              width: '100%',
+                              backfaceVisibility: 'hidden',
+                              transform: 'rotateY(180deg)',
+                            }}
+                          >
+                            <Typography variant="h5" component="div">
+                              {flashcard.back}
+                            </Typography>
+                          </div>
+                        </div>
+                      </Box>
                     </CardContent>
                   </CardActionArea>
                 </Card>
               </Grid>
             ))}
           </Grid>
+          <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center' }}>
+            <Button variant="contained" color="secondary" onClick={handleOpen}>Save</Button>
+          </Box>
         </Box>
       )}
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>Save Flashcard</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Please enter a name for your flashcards collection
+          </DialogContentText>
+          <TextField
+            autoFocus
+            margin="dense"
+            label="Collection Name"
+            type="text"
+            fullWidth
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            variant="outlined"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <Button onClick={saveFlashcards}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
